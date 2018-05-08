@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <Button
+        android:id="@+id/btnDesloca"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/btnDesloca"
+        app:layout_constraintEnd_toStartOf="@+id/btnAcao"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnAcao" />
+
+    <Button
+        android:id="@+id/btnAcao"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/btnAcao"
+        app:layout_constraintBottom_toBottomOf="@+id/btnDesloca"
+        app:layout_constraintEnd_toStartOf="@+id/btnEncerra"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnDesloca"
+        app:layout_constraintTop_toTopOf="@+id/btnDesloca" />
+
+    <Button
+        android:id="@+id/btnEncerra"
+        android:layout_width="123dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/btnEncerrada"
+        app:layout_constraintBottom_toBottomOf="@+id/btnAcao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btnAcao"
+        app:layout_constraintTop_toTopOf="@+id/btnAcao" />
+
+    <EditText
+        android:id="@+id/txtMsgBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/hintMessageReceived"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@+id/txtMsgToSend"
+        app:layout_constraintEnd_toEndOf="@+id/btnEncerra"
+        app:layout_constraintStart_toStartOf="@+id/btnDesloca"
+        app:layout_constraintTop_toBottomOf="@+id/btnAcao" />
+
+    <ImageButton
+        android:id="@+id/btnSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtMsgToSend"
+        app:srcCompat="@android:drawable/ic_media_play" />
+
+    <EditText
+        android:id="@+id/txtMsgToSend"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="@string/hintMessageSend"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSend"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

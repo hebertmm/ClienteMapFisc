@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ClienteMapFisc</string>
+    <string name="btnDesloca">Desloca</string>
+    <string name="btnAcao">Ação</string>
+    <string name="btnEncerrada">Encerrada</string>
+    <string name="hintMessageReceived">Mensagens recebidas</string>
+    <string name="hintMessageSend">Digite aqui a mensagem</string>
+    <string name="default_notification_channel_id">a</string>
+</resources>
