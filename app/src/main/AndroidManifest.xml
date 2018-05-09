@@ -17,21 +17,25 @@
             </intent-filter>
         </activity>
         <!-- [START firebase_service] -->
-        <service
-            android:name=".message.MyFirebaseMessagingService">
+        <service android:name=".message.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_service] -->
         <!-- [START firebase_iid_service] -->
-        <service
-            android:name=".message.MyFirebaseInstanceIDService">
+        <service android:name=".message.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
         <!-- [END firebase_iid_service] -->
+        <service
+            android:name=".LocationService"
+            android:exported="false"></service>
+        <receiver
+            android:name=".MyBroadcastReceiver"
+            android:exported="false"></receiver>
     </application>
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 </manifest>
