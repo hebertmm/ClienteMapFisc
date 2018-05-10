@@ -69,6 +69,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
+
+    @Override
+    public void onMessageSent(String s) {
+        Log.i(TAG, "Mensagem enviada " + s);
+    }
+
+    @Override
+    public void onSendError(String s, Exception e) {
+        Log.e(TAG, "erro "+ s + e.getLocalizedMessage());
+    }
     // [END receive_message]
 
     /**

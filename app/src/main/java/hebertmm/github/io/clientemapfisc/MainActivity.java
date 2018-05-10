@@ -12,12 +12,25 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.Manifest;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Random;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private String TAG = "MainActivity: ";
+    private String SENDER_ID = "1055377163465";
+    private Random random = new Random();
+
+    private ImageButton btnSend;
+    private EditText txtMsgSend;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 111;
 
 
@@ -25,7 +38,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.e("Token: ", FirebaseInstanceId.getInstance().getToken());
+        //Log.e("Token: ", FirebaseInstanceId.getInstance().getToken());
+        btnSend = (ImageButton) findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(this);
+        txtMsgSend = (EditText) findViewById(R.id.txtMsgToSend);
         Intent i = new Intent(this, LocationService.class);
         startService(i);
         AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
@@ -95,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
                 // Permission is denied by the user.
                 Log.i(TAG, "User denied permission.");
             }
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btnSend){
+            FirebaseMessaging fm = FirebaseMessaging.getInstance();
+            fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
+                    .setMessageId(Integer.toString(random.nextInt(9999)))
+                    .addData("message", txtMsgSend.getText().toString())
+                    .addData("team_id","5")
+                    .build());
+            txtMsgSend.setText("");
         }
     }
 }
