@@ -1,27 +1,32 @@
 package hebertmm.github.io.clientemapfisc;
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.Manifest;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.util.Random;
+
+import hebertmm.github.io.clientemapfisc.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -48,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent(this, MyBroadcastReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),10000,pendingIntent);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        String tel = PreferenceManager.getDefaultSharedPreferences(this).getString("tel_number", "");
+        if(tel != "a")
+            Toast.makeText(this, tel,Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -61,6 +70,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //getLastLocation();
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_menu, menu);
+        return true;
+    }
+
     private boolean checkPermissions() {
         int permissionState = ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -125,5 +142,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .build());
             txtMsgSend.setText("");
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.menuConfig){
+           showSettings();
+           return true;
+        }
+        else return super.onOptionsItemSelected(item);
+    }
+
+    private void showSettings() {
+        Intent i = new Intent(this, SettingsActivity.class);
+        startActivity(i);
+
     }
 }

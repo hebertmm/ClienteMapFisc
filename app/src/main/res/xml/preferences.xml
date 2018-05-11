@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:defaultValue="a"
+        android:key="tel_number"
+        android:selectAllOnFocus="true"
+        android:singleLine="true"
+        android:title="@string/prefNumTel" />
+    <EditTextPreference
+        android:defaultValue="https://hmmserver7.ddns.net"
+        android:key="server"
+        android:title="@string/prefServerName" />
+    <EditTextPreference
+        android:defaultValue="0"
+        android:key="phone_ID"
+        android:title="@string/prefPhoneID" />
+
+
+</PreferenceScreen>

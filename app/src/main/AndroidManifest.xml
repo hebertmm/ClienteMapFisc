@@ -16,6 +16,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".settings.SettingsActivity" />
         <!-- [START firebase_service] -->
         <service android:name=".message.MyFirebaseMessagingService">
             <intent-filter>
