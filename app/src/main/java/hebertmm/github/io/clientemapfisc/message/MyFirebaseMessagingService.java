@@ -16,14 +16,33 @@
 
 package hebertmm.github.io.clientemapfisc.message;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.sql.Date;
+import java.time.Instant;
+import java.util.Calendar;
+
+import hebertmm.github.io.clientemapfisc.MainActivity;
+import hebertmm.github.io.clientemapfisc.R;
+import hebertmm.github.io.clientemapfisc.domain.Message;
+import hebertmm.github.io.clientemapfisc.domain.MessageRepository;
+
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+    private MessageRepository messageRepository = new MessageRepository(getApplication());
 
     /**
      * Called when message is received.
@@ -46,18 +65,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
         Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "Time: "+DateUtils.formatDateTime(this, remoteMessage.getSentTime(), DateUtils.FORMAT_SHOW_TIME));
+        Log.d(TAG, "Date: "+DateUtils.formatDateTime(this, remoteMessage.getSentTime(), DateUtils.FORMAT_SHOW_DATE));
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-                //scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                handleNow();
+            Message message = new Message();
+            if(remoteMessage.getData().containsKey("message")) {
+                message.setText(remoteMessage.getData().get("message"));
+                message.setTimestamp(remoteMessage.getSentTime());
             }
+            else
+                message.setText("Mensagem em branco recebida");
+            messageRepository.insert(message);
+            sendNotification(remoteMessage);
+
 
         }
 
@@ -93,10 +116,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Log.d(TAG, "Short lived task is done.");
     }
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
-     */
+
+    private void sendNotification(RemoteMessage remoteMessage){
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.twotone_chat_24)
+                .setContentTitle("Mensagem do Centro de Controle: ")
+                .setContentText(remoteMessage.getData().get("message"))
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(resultPendingIntent);
+
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+    }
 
 }
