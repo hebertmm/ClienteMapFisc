@@ -69,17 +69,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
         txtMsgSend = (EditText) findViewById(R.id.txtMsgToSend);
+        InitialConfigDialog i = new InitialConfigDialog();
+        i.show(getSupportFragmentManager(), "A");
 
 
-        Intent i = new Intent(this, LocationService.class);
-        startService(i);
-        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, MyBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),10000,pendingIntent);
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        String tel = PreferenceManager.getDefaultSharedPreferences(this).getString("tel_number", "");
-        if(tel != "a")
+        //Intent i = new Intent(this, LocationService.class);
+        //startService(i);
+
+        String tel = PreferenceManager.getDefaultSharedPreferences(this).getString("phone_ID", "0");
+        Integer id = Integer.parseInt(tel);
+        if(id != 0)
             Toast.makeText(this, tel,Toast.LENGTH_LONG).show();
     }
 
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             requestPermissions();
         } else {
             Log.i(TAG, "Inside onStart function; getting location when permission is already available");
-            //getLastLocation();
+            startSendLocationService(10000);
         }
     }
 
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted by the user.
                 Log.i(TAG, "User permission has been given. Now getting location");
-                //getLastLocation();
+                startSendLocationService(10000);
             } else {
                 // Permission is denied by the user.
                 Log.i(TAG, "User denied permission.");
@@ -185,5 +184,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent i = new Intent(this, SettingsActivity.class);
         startActivity(i);
 
+    }
+    private void startSendLocationService(Integer interval){
+        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, MyBroadcastReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),10000,pendingIntent);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 }
