@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-@Database(entities = {Message.class}, version = 2)
+@Database(entities = {Message.class}, version = 5)
 public abstract class MessageRoomDatabase extends RoomDatabase {
     private static MessageRoomDatabase INSTANCE;
     public abstract MessageDAO messageDAO();

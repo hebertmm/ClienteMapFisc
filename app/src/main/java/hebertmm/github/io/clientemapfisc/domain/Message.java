@@ -9,6 +9,8 @@ public class Message {
     private Integer id;
     private String text;
     private long timestamp;
+    private int type;
+
 
     public Integer getId() {
         return id;
@@ -32,5 +34,13 @@ public class Message {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

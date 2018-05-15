@@ -7,6 +7,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -54,23 +55,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        final RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final MessageListAdapter adapter = new MessageListAdapter(this);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         messageViewModel = ViewModelProviders.of(this).get(MessageViewModel.class);
         messageViewModel.getAllMessages().observe(this, new Observer<List<Message>>() {
             @Override
             public void onChanged(@Nullable List<Message> messages) {
                 adapter.setmMessages(messages);
+                recyclerView.smoothScrollToPosition(messages.size());
             }
         });
-        //messageRepository = new MessageRepository(getApplication());
+        messageRepository = new MessageRepository(getApplication());
         btnSend = (ImageButton) findViewById(R.id.btnSend);
         btnSend.setOnClickListener(this);
         txtMsgSend = (EditText) findViewById(R.id.txtMsgToSend);
-        InitialConfigDialog i = new InitialConfigDialog();
-        i.show(getSupportFragmentManager(), "A");
+
 
 
         //Intent i = new Intent(this, LocationService.class);
@@ -80,6 +84,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Integer id = Integer.parseInt(tel);
         if(id != 0)
             Toast.makeText(this, tel,Toast.LENGTH_LONG).show();
+        SharedPreferences sp = getSharedPreferences("teste", Context.MODE_PRIVATE);
+        if(!sp.contains("database_id")) {
+            System.out.println("não contem");
+            InitialConfigDialog i = new InitialConfigDialog();
+            i.setCancelable(false);
+            i.show(getSupportFragmentManager(), "A");;
+
+        }
     }
 
     @Override
@@ -163,6 +175,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .addData("message", txtMsgSend.getText().toString())
                     .addData("remote_id","1")
                     .build());
+            Message m = new Message();
+            m.setText(txtMsgSend.getText().toString());
+            m.setTimestamp(System.currentTimeMillis());
+            m.setType(0);
+            messageRepository.insert(m);
             txtMsgSend.setText("");
         }
     }

@@ -75,6 +75,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             if(remoteMessage.getData().containsKey("message")) {
                 message.setText(remoteMessage.getData().get("message"));
                 message.setTimestamp(remoteMessage.getSentTime());
+                message.setType(1);
             }
             else
                 message.setText("Mensagem em branco recebida");

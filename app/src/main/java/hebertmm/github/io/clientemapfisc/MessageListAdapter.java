@@ -3,6 +3,7 @@ package hebertmm.github.io.clientemapfisc;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,17 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         MessageViewHolder messageViewHolder = (MessageViewHolder) holder;
         if(mMessages != null){
             Message current = mMessages.get(position);
+            Log.i("type", String.valueOf(current.getType()));
+            if(current.getType() == 0) {
+                messageViewHolder.messageItemView.setBackgroundResource(R.color.sentMessage);
+                Log.i("type", "Enviada");
+            }
+            else {
+                messageViewHolder.messageItemView.setBackgroundResource(R.color.receivedMessage);
+                Log.i("type", "recebida");
+            }
             messageViewHolder.messageItemView.setText(current.getText());
+
         }
         else
             messageViewHolder.messageItemView.setText("Sem mensagens");
