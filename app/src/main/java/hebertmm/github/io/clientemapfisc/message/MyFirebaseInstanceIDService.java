@@ -42,11 +42,11 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
         SharedPreferences preferences = this.getSharedPreferences(Constants.PROPERTIES_NAME, Context.MODE_PRIVATE);
-        preferences.edit().putString(Constants.FCM_KEY,refreshedToken);
+        preferences.edit().putString(Constants.FCM_KEY,refreshedToken).commit();
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
+        //sendRegistrationToServer(refreshedToken);
     }
     // [END refresh_token]
 

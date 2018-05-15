@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -38,7 +39,7 @@ import hebertmm.github.io.clientemapfisc.domain.MessageRepository;
 import hebertmm.github.io.clientemapfisc.settings.SettingsActivity;
 import hebertmm.github.io.clientemapfisc.util.Constants;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     private String TAG = "MainActivity: ";
     private String SENDER_ID = "1055377163465";
@@ -187,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             txtMsgSend.setText("");
         }
         if(v.getId() == R.id.btnDesloca){
-            preferences.edit().putString(Constants.STATUS_KEY, "DESLOCAMENTO").commit();
+
 
         }
         if(v.getId() == R.id.btnAcao){
@@ -224,5 +225,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this,0,intent,0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),10000,pendingIntent);
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(buttonView.getId() == R.id.btnDesloca){
+            if(isChecked){
+                Log.i("button: ", "isChecked");
+            }
+        }
     }
 }
