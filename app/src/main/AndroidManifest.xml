@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hebertmm.github.io.clientemapfisc">
 
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".settings.SettingsActivity" />
+
         <!-- [START firebase_service] -->
         <service android:name=".message.MyFirebaseMessagingService">
             <intent-filter>
@@ -33,10 +37,15 @@
         <!-- [END firebase_iid_service] -->
         <service
             android:name=".LocationService"
-            android:exported="false"></service>
+            android:exported="false" />
+
         <receiver
             android:name=".MyBroadcastReceiver"
-            android:exported="false"></receiver>
+            android:exported="false" />
+
+        <service
+            android:name=".NetworkService"
+            android:exported="false"></service>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
 </manifest>

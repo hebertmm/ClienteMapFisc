@@ -23,9 +23,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -36,6 +36,7 @@ import java.util.Random;
 import hebertmm.github.io.clientemapfisc.domain.Message;
 import hebertmm.github.io.clientemapfisc.domain.MessageRepository;
 import hebertmm.github.io.clientemapfisc.settings.SettingsActivity;
+import hebertmm.github.io.clientemapfisc.util.Constants;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Random random = new Random();
 
     private ImageButton btnSend;
+    private Button btnDeslocamento;
+    private Button btnAction;
+    private Button btnEncerra;
     private EditText txtMsgSend;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 111;
 
@@ -72,26 +76,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         messageRepository = new MessageRepository(getApplication());
         btnSend = (ImageButton) findViewById(R.id.btnSend);
+        btnDeslocamento = (Button) findViewById(R.id.btnDesloca);
+        btnAction = (Button) findViewById(R.id.btnAcao);
+        btnEncerra = (Button) findViewById(R.id.btnEncerra);
         btnSend.setOnClickListener(this);
+        btnDeslocamento.setOnClickListener(this);
+        btnAction.setOnClickListener(this);
+        btnEncerra.setOnClickListener(this);
         txtMsgSend = (EditText) findViewById(R.id.txtMsgToSend);
-
-
-
-        //Intent i = new Intent(this, LocationService.class);
-        //startService(i);
-
-        String tel = PreferenceManager.getDefaultSharedPreferences(this).getString("phone_ID", "0");
+        String tel = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString("phone_ID", "0");
         Integer id = Integer.parseInt(tel);
-        if(id != 0)
-            Toast.makeText(this, tel,Toast.LENGTH_LONG).show();
-        SharedPreferences sp = getSharedPreferences("teste", Context.MODE_PRIVATE);
-        if(!sp.contains("database_id")) {
+        if(id == 0){
             System.out.println("não contem");
             InitialConfigDialog i = new InitialConfigDialog();
             i.setCancelable(false);
-            i.show(getSupportFragmentManager(), "A");;
+            i.show(getSupportFragmentManager(), "A");
 
         }
+
     }
 
     @Override
@@ -168,6 +171,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        SharedPreferences preferences = this.getSharedPreferences(Constants.PROPERTIES_NAME, Context.MODE_PRIVATE);
         if(v.getId() == R.id.btnSend){
             FirebaseMessaging fm = FirebaseMessaging.getInstance();
             fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
@@ -181,6 +185,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             m.setType(0);
             messageRepository.insert(m);
             txtMsgSend.setText("");
+        }
+        if(v.getId() == R.id.btnDesloca){
+            preferences.edit().putString(Constants.STATUS_KEY, "DESLOCAMENTO").commit();
+
+        }
+        if(v.getId() == R.id.btnAcao){
+            preferences.edit().putString(Constants.STATUS_KEY, "AÇÃO").commit();
+
+        }
+        if(v.getId() == R.id.btnEncerra){
+            preferences.edit().putString(Constants.STATUS_KEY, "ENCERRADA").commit();
+
         }
     }
 

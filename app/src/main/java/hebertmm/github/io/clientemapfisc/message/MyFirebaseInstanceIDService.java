@@ -16,10 +16,14 @@
 
 package hebertmm.github.io.clientemapfisc.message;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import hebertmm.github.io.clientemapfisc.util.Constants;
 
 
 public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
@@ -37,7 +41,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
-
+        SharedPreferences preferences = this.getSharedPreferences(Constants.PROPERTIES_NAME, Context.MODE_PRIVATE);
+        preferences.edit().putString(Constants.FCM_KEY,refreshedToken);
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
@@ -54,6 +59,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
+
     }
 }
