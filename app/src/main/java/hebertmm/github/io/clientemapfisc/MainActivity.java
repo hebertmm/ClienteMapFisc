@@ -64,9 +64,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final MessageListAdapter adapter = new MessageListAdapter(this);
         recyclerView.setAdapter(adapter);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-
         recyclerView.setLayoutManager(linearLayoutManager);
-
         messageViewModel = ViewModelProviders.of(this).get(MessageViewModel.class);
         messageViewModel.getAllMessages().observe(this, new Observer<List<Message>>() {
             @Override
@@ -89,13 +87,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .getString("phone_ID", "0");
         Integer id = Integer.parseInt(tel);
         if(id == 0){
-            System.out.println("não contem");
+            //System.out.println("não contem");
             InitialConfigDialog i = new InitialConfigDialog();
             i.setCancelable(false);
             i.show(getSupportFragmentManager(), "A");
 
         }
-
     }
 
     @Override
@@ -188,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             txtMsgSend.setText("");
         }
         if(v.getId() == R.id.btnDesloca){
-
+            preferences.edit().putString(Constants.STATUS_KEY, "DESLOCAMENTO").commit();
 
         }
         if(v.getId() == R.id.btnAcao){

@@ -22,16 +22,15 @@ import org.json.JSONObject;
  * An {@link IntentService} subclass for handling asynchronous task requests in
  * a service on a separate handler thread.
  * <p>
- * TODO: Customize class - update intent actions, extra parameters and static
+ *
  * helper methods.
  */
 public class NetworkService extends IntentService {
-    // TODO: Rename actions, choose action names that describe tasks that this
-    // IntentService can perform, e.g. ACTION_FETCH_NEW_ITEMS
+
     private static final String ACTION_GET_ID = "hebertmm.github.io.clientemapfisc.action.GET_ID";
     private static final String ACTION_SEND_UPDATE = "hebertmm.github.io.clientemapfisc.action.SEND_UPDATE";
 
-    // TODO: Rename parameters
+
     private static final String EXTRA_NUMBER = "hebertmm.github.io.clientemapfisc.extra.NUMBER";
     private static final String EXTRA_LAT = "hebertmm.github.io.clientemapfisc.extra.LAT";
     private static final String EXTRA_LNG = "hebertmm.github.io.clientemapfisc.extra.LNG";
@@ -40,6 +39,7 @@ public class NetworkService extends IntentService {
 
     SharedPreferences preferences;
     RequestQueue queue;
+    private String server;
 
 
     public NetworkService() {
@@ -53,7 +53,7 @@ public class NetworkService extends IntentService {
      *
      * @see IntentService
      */
-    // TODO: Customize helper method
+
     public static void startActionGetId(Context context, String number) {
         Intent intent = new Intent(context, NetworkService.class);
         intent.setAction(ACTION_GET_ID);
@@ -68,7 +68,7 @@ public class NetworkService extends IntentService {
      *
      * @see IntentService
      */
-    // TODO: Customize helper method
+
     public static void startActionSendUpdate(Context context, String lat, String lng, String fcmId, String status) {
         Intent intent = new Intent(context, NetworkService.class);
         intent.setAction(ACTION_SEND_UPDATE);
@@ -83,6 +83,7 @@ public class NetworkService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
             preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            server = preferences.getString("server","");
             queue = Volley.newRequestQueue(this);
             final String action = intent.getAction();
             if (ACTION_GET_ID.equals(action)) {
@@ -105,7 +106,7 @@ public class NetworkService extends IntentService {
      */
     private void handleActionGetId(String number) {
 
-        String url ="http://10.62.10.52:8080/idByNumber?number=" + number;
+        String url = server +"/idByNumber?number=" + number;
 
 
 // Request a string response from the provided URL.
@@ -134,7 +135,7 @@ public class NetworkService extends IntentService {
      * parameters.
      */
     private void handleActionSendUpdate(final String lat, final String lng, final String fcmId, final String status) {
-        String url = "http://10.62.10.52:8080/updateRemoteDevice/" + preferences.getString("phone_ID", "0");
+        String url = server + "/updateRemoteDevice/" + preferences.getString("phone_ID", "0");
         Log.i("NET: ", url);
         JSONObject params = new JSONObject();
         try {
@@ -162,7 +163,7 @@ public class NetworkService extends IntentService {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // error
-                        Log.d("Error.Response", error.getLocalizedMessage());
+                        //Log.d("Error.Response", error.getLocalizedMessage());
                     }
                 }
         );
