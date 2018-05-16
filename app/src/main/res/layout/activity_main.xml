@@ -9,37 +9,40 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp">
 
-    <Button
+    <ToggleButton
         android:id="@+id/btnDesloca"
         android:layout_width="123dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:text="@string/btnDesloca"
+        android:textOff="Deslocar"
+        android:textOn="Em Desloc."
         app:layout_constraintEnd_toStartOf="@+id/btnAcao"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnAcao" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btnAcao"
         android:layout_width="123dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="@string/btnAcao"
+        android:textOff="Iniciar Ação"
+        android:textOn="Em Ação"
         app:layout_constraintBottom_toBottomOf="@+id/btnDesloca"
         app:layout_constraintEnd_toStartOf="@+id/btnEncerra"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/btnDesloca"
         app:layout_constraintTop_toTopOf="@+id/btnDesloca" />
 
-    <Button
+    <ToggleButton
         android:id="@+id/btnEncerra"
         android:layout_width="123dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/btnEncerrada"
+        android:textOff="Encerrar"
+        android:textOn="Encerrada"
         app:layout_constraintBottom_toBottomOf="@+id/btnAcao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -23,10 +23,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.RemoteMessage;
@@ -46,9 +47,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Random random = new Random();
 
     private ImageButton btnSend;
-    private Button btnDeslocamento;
-    private Button btnAction;
-    private Button btnEncerra;
+    private ToggleButton btnDeslocamento;
+    private ToggleButton btnAction;
+    private ToggleButton btnEncerra;
     private EditText txtMsgSend;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 111;
 
@@ -75,13 +76,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         messageRepository = new MessageRepository(getApplication());
         btnSend = (ImageButton) findViewById(R.id.btnSend);
-        btnDeslocamento = (Button) findViewById(R.id.btnDesloca);
-        btnAction = (Button) findViewById(R.id.btnAcao);
-        btnEncerra = (Button) findViewById(R.id.btnEncerra);
+        btnDeslocamento = (ToggleButton) findViewById(R.id.btnDesloca);
+        btnAction = (ToggleButton) findViewById(R.id.btnAcao);
+        btnEncerra = (ToggleButton) findViewById(R.id.btnEncerra);
         btnSend.setOnClickListener(this);
-        btnDeslocamento.setOnClickListener(this);
-        btnAction.setOnClickListener(this);
-        btnEncerra.setOnClickListener(this);
+        btnDeslocamento.setOnCheckedChangeListener(this);
+        btnAction.setOnCheckedChangeListener(this);
+        btnEncerra.setOnCheckedChangeListener(this);
         txtMsgSend = (EditText) findViewById(R.id.txtMsgToSend);
         String tel = PreferenceManager.getDefaultSharedPreferences(this)
                 .getString("phone_ID", "0");
@@ -169,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        SharedPreferences preferences = this.getSharedPreferences(Constants.PROPERTIES_NAME, Context.MODE_PRIVATE);
         if(v.getId() == R.id.btnSend){
             FirebaseMessaging fm = FirebaseMessaging.getInstance();
             fm.send(new RemoteMessage.Builder(SENDER_ID + "@gcm.googleapis.com")
@@ -184,18 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             messageRepository.insert(m);
             txtMsgSend.setText("");
         }
-        if(v.getId() == R.id.btnDesloca){
-            preferences.edit().putString(Constants.STATUS_KEY, "DESLOCAMENTO").commit();
 
-        }
-        if(v.getId() == R.id.btnAcao){
-            preferences.edit().putString(Constants.STATUS_KEY, "AÇÃO").commit();
-
-        }
-        if(v.getId() == R.id.btnEncerra){
-            preferences.edit().putString(Constants.STATUS_KEY, "ENCERRADA").commit();
-
-        }
     }
 
     @Override
@@ -226,10 +215,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(buttonView.getId() == R.id.btnDesloca){
-            if(isChecked){
-                Log.i("button: ", "isChecked");
+        if(buttonView.isChecked()) {
+            SharedPreferences preferences = this.getSharedPreferences(Constants.PROPERTIES_NAME, Context.MODE_PRIVATE);
+            if (buttonView.getId() == R.id.btnDesloca) {
+                Toast.makeText(this, "Equipe em Deslocamento", Toast.LENGTH_SHORT).show();
+                preferences.edit().putString(Constants.STATUS_KEY, "DESLOCAMENTO").commit();
+                if (btnEncerra.isChecked())
+                    btnEncerra.setChecked(false);
+                if (btnAction.isChecked())
+                    btnAction.setChecked(false);
+
+            }
+            if (buttonView.getId() == R.id.btnAcao) {
+                Toast.makeText(this, "Equipe em ação", Toast.LENGTH_SHORT).show();
+                preferences.edit().putString(Constants.STATUS_KEY, "AÇÃO").commit();
+                if (btnEncerra.isChecked())
+                    btnEncerra.setChecked(false);
+                if (btnDeslocamento.isChecked())
+                    btnDeslocamento.setChecked(false);
+
+            }
+            if (buttonView.getId() == R.id.btnEncerra) {
+                Toast.makeText(this, "Atividade Encerrada", Toast.LENGTH_SHORT).show();
+                preferences.edit().putString(Constants.STATUS_KEY, "ENCERRADA").commit();
+                if (btnAction.isChecked())
+                    btnAction.setChecked(false);
+                if (btnDeslocamento.isChecked())
+                    btnDeslocamento.setChecked(false);
+
             }
         }
     }
+
 }
+
